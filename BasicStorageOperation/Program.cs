@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace BasicStorageOperation
 {
@@ -15,10 +18,57 @@ namespace BasicStorageOperation
 
 			var account = CreateAccount(name, key);
 
-			BasicBlobOperations(account);
+			//			BasicBlobOperations(account);
+			BasicTableOperations(account);
 
 			Console.WriteLine("Press key");
 			Console.ReadKey();
+		}
+
+		private static void BasicTableOperations(CloudStorageAccount account)
+		{
+			var tableClient = account.CreateCloudTableClient();
+			var metricsTransactionsBlobTable = tableClient.GetTableReference("$MetricsHourPrimaryTransactionsBlob");
+
+			var query = from q in metricsTransactionsBlobTable.CreateQuery<DynamicTableEntity>()
+						select q;
+
+			var totals = CalculateTotal(query);
+
+			DisplayTotal(totals);
+		}
+
+		private static void DisplayTotal(IEnumerable<KeyValuePair<string, long>> totals)
+		{
+			foreach (var totalKvp in totals)
+			{
+				Console.WriteLine(totalKvp.Key.PadRight(30) + totalKvp.Value);
+			}
+			Console.WriteLine();
+		}
+
+		private static IEnumerable<KeyValuePair<string, long>> CalculateTotal(IEnumerable<DynamicTableEntity> query)
+		{
+			var totals = new Dictionary<string, long>();
+
+			foreach (var entity in query.ToList())
+			{
+				foreach (var propertyKvp in entity.Properties)
+				{
+					if (propertyKvp.Value.PropertyType == EdmType.Int64)
+					{
+						if (totals.ContainsKey(propertyKvp.Key))
+						{
+							totals[propertyKvp.Key] += (long)propertyKvp.Value.Int64Value;
+						}
+						else
+						{
+							totals.Add(propertyKvp.Key, (long)propertyKvp.Value.Int64Value);
+						}
+					}
+				}
+			}
+			return totals;
 		}
 
 		private static void BasicBlobOperations(CloudStorageAccount account)
