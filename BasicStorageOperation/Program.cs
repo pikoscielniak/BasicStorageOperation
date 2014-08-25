@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Queue;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace BasicStorageOperation
@@ -19,10 +21,46 @@ namespace BasicStorageOperation
 			var account = CreateAccount(name, key);
 
 			//			BasicBlobOperations(account);
-			BasicTableOperations(account);
+			//BasicTableOperations(account);
+			BasicQueueOperations(account.QueueEndpoint, name, key);
 
-			Console.WriteLine("Press key");
+			Console.WriteLine("Press key to exit.");
 			Console.ReadKey();
+		}
+
+		private static void BasicQueueOperations(Uri queueEndpoint, string name, string key)
+		{
+			var creds = new StorageCredentials(name, key);
+			var queueClient = new CloudQueueClient(queueEndpoint, creds);
+
+			var testQueue = queueClient.GetQueueReference("testqueue");
+			testQueue.CreateIfNotExists();
+
+			Console.WriteLine("Sending: ");
+			foreach (var letter in "Windows Azure Storge Queue".ToCharArray())
+			{
+				var message = new CloudQueueMessage(letter.ToString(CultureInfo.InvariantCulture));
+				testQueue.AddMessage(message);
+				Console.Write(letter);
+			}
+			Console.WriteLine();
+			Console.WriteLine();
+			
+			Console.WriteLine("Receiving: ");
+			while (true)
+			{
+				var message = testQueue.GetMessage();
+				if (message != null)
+				{
+					Console.Write(message.AsString);
+					testQueue.DeleteMessage(message);
+				}
+				else
+				{
+					break;
+				}
+			}
+			Console.WriteLine();
 		}
 
 		private static void BasicTableOperations(CloudStorageAccount account)
