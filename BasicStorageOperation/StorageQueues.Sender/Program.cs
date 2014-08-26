@@ -25,8 +25,8 @@ namespace StorageQueues.Sender
 //			SendSentanceSync("Windows Azure Storage Queues, sending messages.");
 //			SendSentanceAsync("Windows Azure Storage Queues, sending messages asynchronously");
 //			SendSentanceAsyncAwait("Windows Azure Storage Queues, sending messages async await");
-			SendSentanceParallel("Windows Azure Storage Queues, sending messages in parallel.");
-//			SendSentanceWithOptions("Windows Azure Storage Queues, sending messages with options.");
+//			SendSentanceParallel("Windows Azure Storage Queues, sending messages in parallel.");
+			SendSentanceWithOptions("Windows Azure Storage Queues, sending messages with options.");
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();
@@ -34,7 +34,23 @@ namespace StorageQueues.Sender
 
 		private static void SendSentanceWithOptions(string text)
 		{
-			throw new NotImplementedException();
+			var sentanceQueue = GetSentancSentenceQueue();
+
+			int visibilityDelay = 1;
+
+			WriteLineColor("Sending: ", ConsoleColor.Cyan);
+			foreach (var letter in text.ToCharArray())
+			{
+				var message = new CloudQueueMessage(letter.ToString(CultureInfo.InvariantCulture));
+				sentanceQueue.AddMessage(
+					message,
+					TimeSpan.FromMinutes(2),
+					TimeSpan.FromSeconds(visibilityDelay));
+				WriteColor(letter.ToString(),ConsoleColor.Magenta);
+				visibilityDelay++;
+			}
+			BreakLine();
+		
 		}
 
 		private static void SendSentanceParallel(string text)

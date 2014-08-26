@@ -19,8 +19,8 @@ namespace StorageQueues.Receiver
 			Console.WriteLine("Hit enter to receive...");
 			Console.ReadLine();
 
-			//			ReceiveCharacters();
-			ReceivSentance();
+			ReceiveCharacters();
+			//			ReceivSentance();
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();
