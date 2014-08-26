@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
@@ -26,10 +27,48 @@ namespace StorageQueues.Sender
 //			SendSentanceAsync("Windows Azure Storage Queues, sending messages asynchronously");
 //			SendSentanceAsyncAwait("Windows Azure Storage Queues, sending messages async await");
 //			SendSentanceParallel("Windows Azure Storage Queues, sending messages in parallel.");
-			SendSentanceWithOptions("Windows Azure Storage Queues, sending messages with options.");
+//			SendSentanceWithOptions("Windows Azure Storage Queues, sending messages with options.");
+
+			TestMessageSize();
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();
+		}
+
+		private static void TestMessageSize()
+		{
+			var sentanceQueue = GetSentancSentenceQueue();
+			var builder = new StringBuilder();
+//			sentanceQueue.EncodeMessage = false;
+			while (true)
+			{
+				builder.Append(GetBigString(1000));
+				WriteLineColor("Length: " + builder.Length, ConsoleColor.Cyan);
+				try
+				{
+					var message = new CloudQueueMessage(builder.ToString());
+					sentanceQueue.AddMessage(message);
+					WriteLineColor("Sent...", ConsoleColor.Magenta);
+				}
+				catch (Exception ex)
+				{
+					WriteLineColor(ex.Message,ConsoleColor.Red);
+					break;
+				}
+			}
+		}
+
+		private static string GetBigString(int number)
+		{
+			var chars = "$%#@!*abcdefghijklmnopqrstuvwxyz1234567890?;:ABCDEFGHIJKLMNOPQRSTUVWXYZ^&".ToCharArray();
+			var random = new Random();
+			var builder = new StringBuilder();
+			for (var i = 0; i < number; i++)
+			{
+				var ind = random.Next(chars.Length);
+				builder.Append(chars[ind]);
+			}
+			return builder.ToString();
 		}
 
 		private static void SendSentanceWithOptions(string text)
