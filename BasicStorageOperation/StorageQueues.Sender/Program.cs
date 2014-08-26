@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Microsoft.WindowsAzure.Storage;
@@ -20,17 +21,59 @@ namespace StorageQueues.Sender
 			var account = CloudStorageAccount.Parse(connectionString);
 			_queueClient = account.CreateCloudQueueClient();
 
-			SendSentanceSync("Windows Azure Storage Queues, sending messages.");
+//			SendSentanceSync("Windows Azure Storage Queues, sending messages.");
+//			SendSentanceAsync("Windows Azure Storage Queues, sending messages asynchronously");
+			SendSentanceAsyncAwait("Windows Azure Storage Queues, sending messages async await");
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();
 		}
 
+		private static async void SendSentanceAsyncAwait(string text)
+		{
+			var sentenceQueue = GetSentancSentenceQueue();
+
+			foreach (var letter in text)
+			{
+				var message = new CloudQueueMessage(letter.ToString(CultureInfo.InvariantCulture));
+				await sentenceQueue.AddMessageAsync(message);
+				WriteColor(letter.ToString(CultureInfo.InvariantCulture),ConsoleColor.Magenta);
+			}
+			Console.WriteLine();
+			Console.WriteLine();
+		}
+
+		private static void SendSentanceAsync(string text)
+		{
+			var sentenceQueue = GetSentancSentenceQueue();
+
+			foreach (var letter in text)
+			{
+				var message = new CloudQueueMessage(letter.ToString(CultureInfo.InvariantCulture));
+				sentenceQueue.AddMessageAsync(message);
+				sentenceQueue.BeginAddMessage(message, AddMessageCallback, sentenceQueue);
+				WriteColor(letter.ToString(CultureInfo.InvariantCulture),ConsoleColor.Magenta);
+			}
+			Console.WriteLine();
+			Console.WriteLine();
+		}
+
+		private static void AddMessageCallback(IAsyncResult result)
+		{
+			WriteLineColor("AddMessageCallback",ConsoleColor.Yellow);
+			try
+			{
+				(result.AsyncState as CloudQueue).EndAddMessage(result);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex.ToString());
+			}
+		}
+
 		private static void SendSentanceSync(string text)
 		{
-			var sentenceQueue = _queueClient.GetQueueReference("sentancequeue");
-			sentenceQueue.CreateIfNotExists();
-			WriteLineColor("Sending: ", ConsoleColor.Cyan);
+			var sentenceQueue = GetSentancSentenceQueue();
 
 			foreach (var letter in text.ToCharArray())
 			{
@@ -40,6 +83,14 @@ namespace StorageQueues.Sender
 			}
 			Console.WriteLine();
 			Console.WriteLine();
+		}
+
+		private static CloudQueue GetSentancSentenceQueue()
+		{
+			var sentenceQueue = _queueClient.GetQueueReference("sentancequeue");
+			sentenceQueue.CreateIfNotExists();
+			WriteLineColor("Sending: ", ConsoleColor.Cyan);
+			return sentenceQueue;
 		}
 
 		private static void WriteColor(string message, ConsoleColor color)
