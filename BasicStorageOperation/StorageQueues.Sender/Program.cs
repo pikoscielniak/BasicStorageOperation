@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 
@@ -23,10 +24,30 @@ namespace StorageQueues.Sender
 
 //			SendSentanceSync("Windows Azure Storage Queues, sending messages.");
 //			SendSentanceAsync("Windows Azure Storage Queues, sending messages asynchronously");
-			SendSentanceAsyncAwait("Windows Azure Storage Queues, sending messages async await");
+//			SendSentanceAsyncAwait("Windows Azure Storage Queues, sending messages async await");
+			SendSentanceParallel("Windows Azure Storage Queues, sending messages in parallel.");
+//			SendSentanceWithOptions("Windows Azure Storage Queues, sending messages with options.");
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();
+		}
+
+		private static void SendSentanceWithOptions(string text)
+		{
+			throw new NotImplementedException();
+		}
+
+		private static void SendSentanceParallel(string text)
+		{
+			var sentanceQueue = GetSentancSentenceQueue();
+
+			Parallel.ForEach<char>(text, letter =>
+			{
+				var message = new CloudQueueMessage(letter.ToString(CultureInfo.InvariantCulture));
+				sentanceQueue.AddMessage(message);
+				WriteColor(letter.ToString(CultureInfo.InvariantCulture),ConsoleColor.Magenta);
+			});
+			BreakLine();
 		}
 
 		private static async void SendSentanceAsyncAwait(string text)
@@ -39,6 +60,11 @@ namespace StorageQueues.Sender
 				await sentenceQueue.AddMessageAsync(message);
 				WriteColor(letter.ToString(CultureInfo.InvariantCulture),ConsoleColor.Magenta);
 			}
+			BreakLine();
+		}
+
+		private static void BreakLine()
+		{
 			Console.WriteLine();
 			Console.WriteLine();
 		}
@@ -54,8 +80,7 @@ namespace StorageQueues.Sender
 				sentenceQueue.BeginAddMessage(message, AddMessageCallback, sentenceQueue);
 				WriteColor(letter.ToString(CultureInfo.InvariantCulture),ConsoleColor.Magenta);
 			}
-			Console.WriteLine();
-			Console.WriteLine();
+			BreakLine();
 		}
 
 		private static void AddMessageCallback(IAsyncResult result)
