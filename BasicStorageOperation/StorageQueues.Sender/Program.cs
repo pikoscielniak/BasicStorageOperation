@@ -23,6 +23,7 @@ namespace StorageQueues.Sender
 			SendSentanceSync("Windows Azure Storage Queues, sending messages.");
 
 			Console.WriteLine("Done!");
+			Console.ReadLine();
 		}
 
 		private static void SendSentanceSync(string text)
