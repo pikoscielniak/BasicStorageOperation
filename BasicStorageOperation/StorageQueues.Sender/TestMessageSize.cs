@@ -8,7 +8,7 @@ namespace StorageQueues.Sender
 	{
 		private static void TestMessageSize()
 		{
-			var sentanceQueue = GetSentancSentenceQueue();
+			var sentanceQueue = GetQueue();
 			var builder = new StringBuilder();
 			//			sentanceQueue.EncodeMessage = false;
 			while (true)

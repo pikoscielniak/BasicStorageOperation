@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageQueues.Receiver", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageQueues.Sender", "StorageQueues.Sender\StorageQueues.Sender.csproj", "{FFE30DD6-06F2-49EE-9858-3E7F97276163}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataContracts", "..\DataContracts\DataContracts.csproj", "{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FFE30DD6-06F2-49EE-9858-3E7F97276163}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFE30DD6-06F2-49EE-9858-3E7F97276163}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFE30DD6-06F2-49EE-9858-3E7F97276163}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

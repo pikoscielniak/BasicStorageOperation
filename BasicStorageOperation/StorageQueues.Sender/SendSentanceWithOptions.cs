@@ -8,7 +8,7 @@ namespace StorageQueues.Sender
 	{
 		private static void SendSentanceWithOptions(string text)
 		{
-			var sentanceQueue = GetSentancSentenceQueue();
+			var sentanceQueue = GetQueue();
 
 			int visibilityDelay = 1;
 

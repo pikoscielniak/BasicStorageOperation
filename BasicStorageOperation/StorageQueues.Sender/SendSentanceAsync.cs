@@ -9,7 +9,7 @@ namespace StorageQueues.Sender
 	{
 		private static void SendSentanceAsync(string text)
 		{
-			var sentenceQueue = GetSentancSentenceQueue();
+			var sentenceQueue = GetQueue();
 
 			foreach (var letter in text)
 			{

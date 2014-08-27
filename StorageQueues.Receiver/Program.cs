@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace StorageQueues.Receiver
 {
-	class Program
+	partial class Program
 	{
 		private static CloudQueueClient _queueClient;
 		static void Main(string[] args)
@@ -19,76 +20,22 @@ namespace StorageQueues.Receiver
 			Console.WriteLine("Hit enter to receive...");
 			Console.ReadLine();
 
-			ReceiveCharacters();
+			//			ReceiveCharacters();
 			//			ReceivSentance();
-
+			ReceiveSerializedMessages();
 			Console.WriteLine("Done!");
 			Console.ReadLine();
 		}
 
-		private static void ReceivSentance()
+		private static void ReceiveSerializedMessages()
 		{
-			var sentenceQueue = GetSentenceQueue();
 			while (true)
 			{
-				var messages = sentenceQueue.GetMessages(32).ToList();
-				WriteLineColor("Received " + messages.Count + " messages.", ConsoleColor.Cyan);
-
-				if (messages.Count > 0)
-				{
-					foreach (var message in messages)
-					{
-						WriteColor(message.AsString, ConsoleColor.Magenta);
-						sentenceQueue.DeleteMessage(message);
-					}
-				}
-				else
-				{
-					break;
-				}
+				Thread.Sleep(2000);
+				ReceiveStringSerializedMessages();
+				Thread.Sleep(2000);
+				ReceivedBinarySerializedMessages();
 			}
-			Console.WriteLine();
-		}
-
-		private static void ReceiveCharacters()
-		{
-			var sentenceQueue = GetSentenceQueue();
-
-			while (true)
-			{
-				var message = sentenceQueue.GetMessage();
-				if (message != null)
-				{
-					WriteColor(message.AsString, ConsoleColor.Magenta);
-					sentenceQueue.DeleteMessage(message);
-				}
-				else
-				{
-					break;
-				}
-			}
-			Console.WriteLine();
-		}
-
-		private static CloudQueue GetSentenceQueue()
-		{
-			var sentenceQueue = _queueClient.GetQueueReference("sentancequeue");
-			sentenceQueue.CreateIfNotExists();
-			return sentenceQueue;
-		}
-
-		private static void WriteColor(string message, ConsoleColor color)
-		{
-			Console.ForegroundColor = color;
-			Console.Write(message);
-			Console.ResetColor();
-		}
-
-		private static void WriteLineColor(string message, ConsoleColor color)
-		{
-			Console.ForegroundColor = color;
-			Console.WriteLine(message);
-			Console.ResetColor();
 		}
 	}
 }

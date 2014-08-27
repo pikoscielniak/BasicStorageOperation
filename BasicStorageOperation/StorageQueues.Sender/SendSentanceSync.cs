@@ -8,7 +8,7 @@ namespace StorageQueues.Sender
 	{
 		private static void SendSentanceSync(string text)
 		{
-			var sentenceQueue = GetSentancSentenceQueue();
+			var sentenceQueue = GetQueue();
 
 			foreach (var letter in text.ToCharArray())
 			{

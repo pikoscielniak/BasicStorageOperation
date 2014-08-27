@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using DataContracts;
 using Microsoft.WindowsAzure.Storage.Queue;
 
 namespace StorageQueues.Sender
@@ -11,9 +13,9 @@ namespace StorageQueues.Sender
 			Console.WriteLine();
 		}
 
-		private static CloudQueue GetSentancSentenceQueue()
+		private static CloudQueue GetQueue()
 		{
-			var sentenceQueue = _queueClient.GetQueueReference("sentancequeue");
+			var sentenceQueue = _queueClient.GetQueueReference("queue");
 			sentenceQueue.CreateIfNotExists();
 			WriteLineColor("Sending: ", ConsoleColor.Cyan);
 			return sentenceQueue;
@@ -44,6 +46,21 @@ namespace StorageQueues.Sender
 				builder.Append(chars[ind]);
 			}
 			return builder.ToString();
+		}
+
+		private static LapData GetTestLapData(string name)
+		{
+			var lapData = new LapData
+			{
+				PlayerName = name,
+				LapId = Guid.NewGuid().ToString()
+			};
+			for (int i = 0; i <= 6; i++)
+			{
+				lapData.SectorTimesMs.Add(i * 8923);
+			}
+			lapData.LapTimeMs = lapData.SectorTimesMs[lapData.SectorTimesMs.Count - 1];
+			return lapData;
 		}
 	}
 }

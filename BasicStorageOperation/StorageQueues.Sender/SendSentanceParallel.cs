@@ -9,7 +9,7 @@ namespace StorageQueues.Sender
 	{
 		private static void SendSentanceParallel(string text)
 		{
-			var sentanceQueue = GetSentancSentenceQueue();
+			var sentanceQueue = GetQueue();
 
 			Parallel.ForEach<char>(text, letter =>
 			{

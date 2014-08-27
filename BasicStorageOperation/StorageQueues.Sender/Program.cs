@@ -25,7 +25,9 @@ namespace StorageQueues.Sender
 			//			SendSentanceParallel("Windows Azure Storage Queues, sending messages in parallel.");
 			//			SendSentanceWithOptions("Windows Azure Storage Queues, sending messages with options.");
 
-			TestMessageSize();
+//			TestMessageSize();
+			SendStringSeralizedMessages();
+			SendBinarySerializedMessages();
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();
