@@ -27,7 +27,7 @@ namespace StorageQueues.Sender
 
 //			TestMessageSize();
 			SendStringSeralizedMessages();
-			SendBinarySerializedMessages();
+//			SendBinarySerializedMessages();
 
 			Console.WriteLine("Done!");
 			Console.ReadLine();

@@ -33,8 +33,8 @@ namespace StorageQueues.Receiver
 			{
 				Thread.Sleep(2000);
 				ReceiveStringSerializedMessages();
-				Thread.Sleep(2000);
-				ReceivedBinarySerializedMessages();
+//				Thread.Sleep(2000);
+//				ReceivedBinarySerializedMessages();
 			}
 		}
 	}

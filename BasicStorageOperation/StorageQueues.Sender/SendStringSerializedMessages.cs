@@ -9,16 +9,15 @@ namespace StorageQueues.Sender
 		private static void SendStringSeralizedMessages()
 		{
 			var queue = GetQueue();
-			queue.EncodeMessage = false;
+			queue.EncodeMessage = true;
 			Console.WriteLine("SendStringSeralizedMessages");
 			for (int i = 1; i <= 3; i++)
 			{
 				var lapData = GetTestLapData("Player-" + i);
-				var stringMessage = new CloudQueueMessage(SerializationUtils.SerializeToString<LapData>(lapData));
+				var stringMessage = new CloudQueueMessage(SerializationUtils.SerializeToString(lapData));
 				queue.AddMessage(stringMessage);
 				Console.WriteLine(".");
 			}
 		}
-
 	}
 }

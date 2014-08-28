@@ -1,34 +1,20 @@
 ﻿using System.IO;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Xml;
+using Newtonsoft.Json;
 
 namespace DataContracts
 {
 	public static class SerializationUtils
 	{
-		public static string SerializeToString<T>(T objectToSerialize)
+		public static string SerializeToString(object objectToSerialize)
 		{
-			using (var memStm = new MemoryStream())
-			{
-				var serializer = new DataContractSerializer(typeof(T));
-				var sb = new StringBuilder();
-				using (var writer = XmlWriter.Create(sb))
-				{
-					serializer.WriteObject(writer, objectToSerialize);
-					writer.Flush();
-					return sb.ToString();
-				}
-			}
+			return JsonConvert.SerializeObject(objectToSerialize);
 		}
 
-		public static T Deserialize<T>(string rawXml)
+		public static T Deserialize<T>(string raw)
 		{
-			using (var reader = XmlReader.Create(new StreamReader(rawXml)))
-			{
-				var formatter = new DataContractSerializer(typeof(T));
-				return (T)formatter.ReadObject(reader);
-			}
+			return JsonConvert.DeserializeObject<T>(raw);
 		}
 
 		public static byte[] SerializeToByteArray<T>(T obj)
