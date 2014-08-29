@@ -17,15 +17,29 @@ namespace AzureTableStorage.TestClient
 			Console.ReadLine();
 
 //						InsertProducts();
-			InsertProductsBatching();
+//			InsertProductsBatching();
 			//			GetAllProducts();	
 			//			GetAllProductsByCategory(Categories[2]);
 //			GetAllProductsByColor(Colors[2]);
 //			DeleteAllProducts();
-
+			ReplaceProduct();
 			watch.Stop();
 			Console.WriteLine("Time: " + watch.Elapsed.ToString("mm\\:ss\\.fff"));
 			Console.ReadLine();
+		}
+
+		private static void ReplaceProduct()
+		{
+			Console.WriteLine("Replacing");
+			var productAccess = new ProductAccess();
+			var catogory = Categories[2];
+			var product = productAccess.GetByCategory(catogory).First();
+
+			product.Name = GetRandomString(6);
+			product.Model = GetRandomString(4);
+			product.ListPrice = GetRandomPrice();
+
+			productAccess.Replace(product);
 		}
 
 		private static void InsertProductsBatching()
@@ -33,7 +47,8 @@ namespace AzureTableStorage.TestClient
 			Console.WriteLine("Adding products in batch...");
 			var productAccess = new ProductAccess();
 
-			var products = Enumerable.Range(101, 100).Select(GetRandomProduct).ToList();
+			var products = Enumerable.Range(201, 100).Select(GetRandomProduct).ToList();
+			products = products.OrderBy(p => p.PartitionKey).ToList();
 			int transactionCount = productAccess.Insert(products);
 			Console.WriteLine("Transactions: "+transactionCount);
 		}
@@ -106,11 +121,16 @@ namespace AzureTableStorage.TestClient
 			{
 				PartitionKey = RandomCategory(),
 				RowKey = number.ToString(CultureInfo.InvariantCulture),
-				Name = RandomString(10),
+				Name = GetRandomString(10),
 				Color = RandomColor(),
-				Model = RandomString(4),
-				ListPrice = Random.NextDouble() * 1000,
+				Model = GetRandomString(4),
+				ListPrice = GetRandomPrice(),
 			};
+		}
+
+		private static double GetRandomPrice()
+		{
+			return Random.NextDouble() * 1000;
 		}
 
 		private static string RandomCategory()
@@ -127,7 +147,7 @@ namespace AzureTableStorage.TestClient
 		private static readonly IList<string> Categories = new List<string> { "Food", "Clothes", "Toys", "Forniture" };
 		private static readonly IList<string> Colors = new List<string> { "Red", "Green", "Blue", "Black" };
 
-		private static string RandomString(int size)
+		private static string GetRandomString(int size)
 		{
 			var builder = new StringBuilder();
 			for (int i = 0; i < size; i++)

@@ -92,7 +92,7 @@ namespace AzureTableStorage.AzureDataAccess
 			{
 				var insertOperation = TableOperation.Insert(product);
 				if ((product.PartitionKey.Equals(currentCategory) ||
-				     string.IsNullOrEmpty(currentCategory)) && batchOperation.Count < 100)
+					 string.IsNullOrEmpty(currentCategory)) && batchOperation.Count < 100)
 				{
 					batchOperation.Add(insertOperation);
 				}
@@ -114,6 +114,12 @@ namespace AzureTableStorage.AzureDataAccess
 			}
 
 			return transactionCount;
+		}
+
+		public void Replace(Product product)
+		{
+			var replaceOperation = TableOperation.Replace(product);
+			_table.Execute(replaceOperation);
 		}
 	}
 }
