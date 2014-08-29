@@ -38,7 +38,9 @@ namespace AzureTableStorage.TestClient
 			product.Name = GetRandomString(6);
 			product.Model = GetRandomString(4);
 			product.ListPrice = GetRandomPrice();
-
+			//			product.ETag = "*"; //turn off optimistic concurrency
+			Console.WriteLine("Press enter to update");
+			Console.ReadLine();
 			productAccess.Replace(product);
 		}
 
