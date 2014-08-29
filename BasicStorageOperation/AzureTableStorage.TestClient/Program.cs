@@ -15,10 +15,11 @@ namespace AzureTableStorage.TestClient
 			Console.WriteLine("Press enter to start");
 			Console.ReadLine();
 
-			//			InsertProducts();
+						InsertProducts();
 			//			GetAllProducts();	
 			//			GetAllProductsByCategory(Categories[2]);
 //			GetAllProductsByColor(Colors[2]);
+//			DeleteAllProducts();
 
 			watch.Stop();
 			Console.WriteLine("Time: " + watch.Elapsed.ToString("mm\\:ss\\.fff"));
@@ -61,6 +62,13 @@ namespace AzureTableStorage.TestClient
 			Console.WriteLine();
 		}
 
+		private static void DeleteAllProducts()
+		{
+			Console.WriteLine("Deleting all products");
+			var productAccess = new ProductAccess();
+			productAccess.DeleteAll();
+		}
+
 		private static void DisplayProducts(IEnumerable<Product> products)
 		{
 			foreach (var product in products)
@@ -72,7 +80,7 @@ namespace AzureTableStorage.TestClient
 		private static void InsertProducts()
 		{
 			var productAccess = new ProductAccess();
-			for (var i = 1001; i <= 1100; i++)
+			for (var i = 1; i <= 100; i++)
 			{
 				var product = GetRandomProduct(i);
 				productAccess.Insert(product);
