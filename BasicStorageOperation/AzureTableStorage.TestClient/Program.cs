@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using AzureTableStorage.AzureDataAccess;
 
@@ -15,7 +16,8 @@ namespace AzureTableStorage.TestClient
 			Console.WriteLine("Press enter to start");
 			Console.ReadLine();
 
-						InsertProducts();
+//						InsertProducts();
+			InsertProductsBatching();
 			//			GetAllProducts();	
 			//			GetAllProductsByCategory(Categories[2]);
 //			GetAllProductsByColor(Colors[2]);
@@ -24,6 +26,16 @@ namespace AzureTableStorage.TestClient
 			watch.Stop();
 			Console.WriteLine("Time: " + watch.Elapsed.ToString("mm\\:ss\\.fff"));
 			Console.ReadLine();
+		}
+
+		private static void InsertProductsBatching()
+		{
+			Console.WriteLine("Adding products in batch...");
+			var productAccess = new ProductAccess();
+
+			var products = Enumerable.Range(101, 100).Select(GetRandomProduct).ToList();
+			int transactionCount = productAccess.Insert(products);
+			Console.WriteLine("Transactions: "+transactionCount);
 		}
 
 		private static void GetAllProductsByColor(string color)

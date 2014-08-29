@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using Microsoft.WindowsAzure.Storage;
@@ -78,6 +79,41 @@ namespace AzureTableStorage.AzureDataAccess
 				var operation = TableOperation.Delete(product);
 				_table.Execute(operation);
 			}
+		}
+
+		public int Insert(List<Product> products)
+		{
+			var transactionCount = 0;
+
+			var batchOperation = new TableBatchOperation();
+			string currentCategory = "";
+
+			foreach (var product in products)
+			{
+				var insertOperation = TableOperation.Insert(product);
+				if ((product.PartitionKey.Equals(currentCategory) ||
+				     string.IsNullOrEmpty(currentCategory)) && batchOperation.Count < 100)
+				{
+					batchOperation.Add(insertOperation);
+				}
+				else
+				{
+					_table.ExecuteBatch(batchOperation);
+					transactionCount++;
+					Console.WriteLine("Batch: {0} - {1}", currentCategory, batchOperation.Count);
+					batchOperation = new TableBatchOperation();
+					batchOperation.Add(insertOperation);
+				}
+				currentCategory = product.PartitionKey;
+			}
+			if (batchOperation.Count > 0)
+			{
+				_table.ExecuteBatch(batchOperation);
+				transactionCount++;
+				Console.WriteLine("Batch: {0} - {1}", currentCategory, batchOperation.Count);
+			}
+
+			return transactionCount;
 		}
 	}
 }
