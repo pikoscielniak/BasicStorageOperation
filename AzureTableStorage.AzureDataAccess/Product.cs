@@ -51,9 +51,9 @@ namespace AzureTableStorage.AzureDataAccess
 
 		public IEnumerable<Product> GetByCategory(string category)
 		{
-//			var query = from q in _table.CreateQuery<Product>()
-//						where q.PartitionKey.Equals(category)
-//						select q;
+			//			var query = from q in _table.CreateQuery<Product>()
+			//						where q.PartitionKey.Equals(category)
+			//						select q;
 
 			var query = _table.CreateQuery<Product>();
 			query.Where(c => c.PartitionKey == category);
@@ -61,5 +61,13 @@ namespace AzureTableStorage.AzureDataAccess
 		}
 
 
+		public IEnumerable<Product> GetByColor(string color)
+		{
+//			return (from q in _table.CreateQuery<Product>()
+//					where q.Color.Equals(color)
+//					select q).ToList();
+
+			return _table.CreateQuery<Product>().Where(p => p.Color == color).ToList();
+		}
 	}
 }
