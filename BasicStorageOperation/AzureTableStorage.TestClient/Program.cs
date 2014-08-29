@@ -15,11 +15,27 @@ namespace AzureTableStorage.TestClient
 			Console.WriteLine("Press enter to start");
 			Console.ReadLine();
 
-			InsertProducts();
+//			InsertProducts();
+			GetAllProducts();	
 
 			watch.Stop();
 			Console.WriteLine("Time: " + watch.Elapsed.ToString("mm\\:ss\\.fff"));
 			Console.ReadLine();
+		}
+
+		private static void GetAllProducts()
+		{
+			Console.WriteLine("Getting all products data...");
+			Console.WriteLine();
+
+			var productAccess = new ProductAccess();
+			var products = productAccess.GetAll();
+
+			foreach (var product in products)
+			{
+				Console.WriteLine("{0} - {1} - {2}", product.PartitionKey, product.Name, product.ListPrice);
+			}
+			Console.WriteLine();
 		}
 
 		private static void InsertProducts()

@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.IO;
+using System.Linq;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using System.Collections.Generic;
 
 namespace AzureTableStorage.AzureDataAccess
 {
@@ -30,6 +33,20 @@ namespace AzureTableStorage.AzureDataAccess
 		{
 			var operation = TableOperation.Insert(product);
 			_table.Execute(operation);
+		}
+
+		public IEnumerable<Product> GetAll()
+		{
+//			var query = (from q in _table.CreateQuery<Product>()
+//				select q);
+//			return query.ToList();
+
+//			var query = (from q in _table.CreateQuery<Product>()
+//						 select q).Take(10);
+//			return query.ToList();
+
+			var query = new TableQuery<Product>();
+			return _table.ExecuteQuery(query);
 		}
 	}
 }
