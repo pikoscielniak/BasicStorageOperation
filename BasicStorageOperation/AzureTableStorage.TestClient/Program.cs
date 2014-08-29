@@ -16,11 +16,24 @@ namespace AzureTableStorage.TestClient
 			Console.ReadLine();
 
 //			InsertProducts();
-			GetAllProducts();	
+//			GetAllProducts();	
+			GetAllProductsByCategory(Categories[2]);
 
 			watch.Stop();
 			Console.WriteLine("Time: " + watch.Elapsed.ToString("mm\\:ss\\.fff"));
 			Console.ReadLine();
+		}
+
+		private static void GetAllProductsByCategory(string category)
+		{
+			Console.WriteLine("Getting all products by category...");
+			Console.WriteLine();
+
+			var productAccess = new ProductAccess();
+			var products = productAccess.GetByCategory(category);
+
+			DisplayProducts(products);
+			Console.WriteLine();
 		}
 
 		private static void GetAllProducts()
@@ -31,11 +44,16 @@ namespace AzureTableStorage.TestClient
 			var productAccess = new ProductAccess();
 			var products = productAccess.GetAll();
 
+			DisplayProducts(products);
+			Console.WriteLine();
+		}
+
+		private static void DisplayProducts(IEnumerable<Product> products)
+		{
 			foreach (var product in products)
 			{
 				Console.WriteLine("{0} - {1} - {2}", product.PartitionKey, product.Name, product.ListPrice);
 			}
-			Console.WriteLine();
 		}
 
 		private static void InsertProducts()
