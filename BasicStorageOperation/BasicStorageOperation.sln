@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageQueues.Sender", "Sto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataContracts", "..\DataContracts\DataContracts.csproj", "{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTableStorage.AzureDataAccess", "..\AzureTableStorage.AzureDataAccess\AzureTableStorage.AzureDataAccess.csproj", "{0E0C9A64-9A6E-4209-9110-AD02E2071B6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTableStorage.TestClient", "AzureTableStorage.TestClient\AzureTableStorage.TestClient.csproj", "{EE96809E-51E8-4BDA-BFC3-18D7BB479B6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F8E7116-0DB9-4891-A62A-B7A0C1EADD40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E0C9A64-9A6E-4209-9110-AD02E2071B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E0C9A64-9A6E-4209-9110-AD02E2071B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E0C9A64-9A6E-4209-9110-AD02E2071B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E0C9A64-9A6E-4209-9110-AD02E2071B6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE96809E-51E8-4BDA-BFC3-18D7BB479B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE96809E-51E8-4BDA-BFC3-18D7BB479B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE96809E-51E8-4BDA-BFC3-18D7BB479B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE96809E-51E8-4BDA-BFC3-18D7BB479B6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
