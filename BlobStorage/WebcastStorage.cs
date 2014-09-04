@@ -20,6 +20,7 @@ namespace BlobStorage
 			var account = CloudStorageAccount.Parse(connectionString);
 			var blobClient = account.CreateCloudBlobClient();
 			BlobContainer = blobClient.GetContainerReference(ContainerName);
+//			blobClient.DefaultRequestOptions.SingleBlobUploadThresholdInBytes = 4;
 			if (!BlobContainer.Exists())
 			{
 				BlobContainer.Create();
